@@ -1,0 +1,13 @@
+#header {
+  height: fit-content;
+}
+
+.semi-circle {
+  width: 150px;
+  height: 75px;
+  background-color: aliceblue;
+  border-top-left-radius: 75px;
+  border-top-right-radius: 75px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
