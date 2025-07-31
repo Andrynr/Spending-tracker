@@ -1,71 +1,65 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Alert, Col, Container, Row, Tab } from "react-bootstrap";
 import "./App.css";
-import { Tab, Container, Row, Col, Stack, Modal } from "react-bootstrap";
-import List from "./components/List.jsx";
-import Header from "./components/Header.jsx";
 import Argent from "./components/Argent.jsx";
 import Graph from "./components/Graph.jsx";
+import Header from "./components/Header.jsx";
+import List from "./components/List.jsx";
 import Navigation from "./components/Navigation.jsx";
 import TransacModal from "./components/TransacModal.jsx";
 
 function App() {
   const [mShow, setMShow] = useState(false);
+  const [action, setAction] = useState("");
+  const [transactions, setTransaction] = useState([]);
+  const dateRef = useRef(new Date().toISOString().slice(0, 7));
+  const [dates, setdates] = useState(["2023-03", "2024-04", "2025-05"]);
 
-  const [transaction, setTransaction] = useState("");
-
-  const [argent, setArgent] = useState({
-    solde: 100000,
-    revenue: 100000,
+  const [argents, setArgent] = useState({
+    solde: 0,
+    revenue: 0,
     depense: 0,
   });
 
-  const [action, setAction] = useState("");
-
-  const Depense = (dep) => {
-    setArgent((prev) => ({
-      ...prev,
-      solde: argent.solde - dep,
-      depense: argent.depense + dep,
-    }));
-  };
-
-  const Transaction = (newTrans) => {
-    const trans = {
-      type: action,
-      date: new Date(),
-      categorie: "",
+  useEffect(() => {
+    return () => {
+      setAction("Solde");
+      setMShow(true);
     };
-    setTransaction([...transaction, newTrans]);
+  }, []);
+  const dateCourant = (date) => {
+    dateRef.current = date;
   };
-
-  const Gain = (benefice) => {
-    setArgent((prev) => ({
-      ...prev,
-      solde: argent.solde + benefice,
-      revenue: argent.revenue + benefice,
-    }));
-  };
-
-  const ajustement = (newSold) => {
-    setArgent((prev) => ({ ...prev, solde: newSold }));
-  };
-
   const commit = (newTransac) => {
-    setArgent((prev) => ({
-      ...prev,
-      solde: argent.solde + newTransac.montant,
-      revenue:
-        newTransac.montant > 0
-          ? argent.revenue + newTransac.montant
-          : argent.revenue + 0,
-      depense:
-        newTransac.montant < 0
-          ? argent.depense + newTransac.montant
-          : argent.depense + 0,
-    }));
+    const newValeurs = {
+      solde: argents.solde,
+      revenue: argents.revenue,
+      depense: argents.depense,
+    };
 
-    setTransaction([...transaction, newTransac]);
+    if (action === "Solde") {
+      newValeurs.solde = newTransac.montant;
+    } else if (action === "Revenue") {
+      newValeurs.solde += newTransac.montant;
+      newValeurs.revenue += newTransac.montant;
+    } else {
+      newValeurs.solde -= newTransac.montant;
+      newValeurs.depense += newTransac.montant;
+    }
+
+    try {
+      setArgent(newValeurs);
+      setTransaction([...transactions, newTransac]);
+    } catch (error) {
+      alert(error);
+    }
   };
+  useEffect(() => {
+    const newdates = Array.from(
+      new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
+    );
+    setdates(newdates);
+  }, [transactions]);
 
   const handleModal = () => {
     setMShow(!mShow);
@@ -74,14 +68,19 @@ function App() {
   return (
     <>
       <Tab.Container defaultActiveKey="dashboard">
-        <Row className=" h-100 m-0">
-          <Col md={3} className="bg-dark p-3" id="navigation">
+        <Row className=" m-0 h-100">
+          <Col md={3} className="bg-dark p-md-3" id="navigation">
             <Navigation />
           </Col>
-          <Col xs={9} className="row">
+          <Col md={9}>
             <Tab.Content>
               <Tab.Pane eventKey="dashboard">
-                <Header onAction={setAction} onShow={handleModal} />
+                <Header
+                  onAction={setAction}
+                  onShow={handleModal}
+                  dates={dates}
+                  dateCrnt={dateCourant}
+                />
                 <TransacModal
                   mShow={mShow}
                   ajoutTransac={commit}
@@ -89,40 +88,18 @@ function App() {
                   fermer={setMShow}
                 />
                 <Container>
-                  <Row
-                    direction="horizontal"
-                    className="justify-content-between my-3"
-                  >
-                    <Col>
-                      <Argent
-                        titre="Solde"
-                        valeur={argent.solde}
-                        cardClass={"border-primary"}
-                      />
-                    </Col>
-                    <Col>
-                      <Argent
-                        titre="Revenue"
-                        valeur={argent.revenue}
-                        cardClass={"border-success"}
-                        titleClass={"text-success"}
-                      />
-                    </Col>
-                    <Col>
-                      <Argent
-                        titre="Dépenses"
-                        valeur={argent.depense}
-                        cardClass={"border-warning"}
-                        titleClass={"text-warning"}
-                      />
-                    </Col>
-                  </Row>
+                  <Argent agts={argents} />
                 </Container>
 
                 <Container>
-                  <Graph />
+                  <Graph transactions={transactions} />
                 </Container>
-                <List />
+              </Tab.Pane>
+
+              <Tab.Pane eventKey="transactions">
+                <Container>
+                  <List transactions={transactions} />
+                </Container>
               </Tab.Pane>
               <Tab.Pane eventKey="setting">
                 <h1>Ici les paramètres</h1>

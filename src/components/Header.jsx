@@ -1,8 +1,9 @@
 import { Form, Button, Overlay, Popover } from "react-bootstrap";
 import "../assets/css/Header.css";
 import { useState, useRef } from "react";
+import { getMonth } from "../utils/dateFormat";
 
-function Header({ onAction, onShow }) {
+function Header({ onAction, onShow, dates, dateCrnt }) {
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
@@ -16,6 +17,11 @@ function Header({ onAction, onShow }) {
     onShow();
     setShow(false);
   };
+  const ButtonAjuste = () => {
+    onAction("Solde");
+    onShow();
+    setShow(false);
+  };
 
   return (
     <>
@@ -26,29 +32,45 @@ function Header({ onAction, onShow }) {
 
         <div className="col-auto row my-auto">
           <div className="col-auto">
-            <Form.Select>
-              <option value="">2918 23</option>
-              <option value="">2938 12</option>
+            <Form.Select
+              onChange={(e) => dateCrnt(e.target.value)}
+              className="text-capitalize"
+            >
+              {dates?.map((date, i) => (
+                <option value={date} key={date}>
+                  {getMonth(date)}
+                </option>
+              ))}
             </Form.Select>
           </div>
           <div className="col-auto">
-            <Button
-              variant="primary"
-              ref={target}
-              onClick={() => setShow(!show)}
-            >
+            <Button ref={target} onClick={() => setShow(!show)} id="ajouter">
               <span className="me-2">+</span>
               <span>Ajouter</span>
             </Button>
           </div>
-          <Overlay target={target.current} show={show} placement="left">
+          <Overlay target={target.current} show={show} placement="bottom">
             {(props) => (
-              <Popover {...props}>
-                <Popover.Header>Action</Popover.Header>
+              <Popover {...props} id="action">
                 <Popover.Body>
-                  <div className="semi-circle d-flex justify-content-center align-items-center gap-2">
-                    <Button onClick={ButtonRevenue}>Revenue</Button>
-                    <Button onClick={ButtonDepense}>Dépense</Button>
+                  <div className="semi-circle d-flex flex-column gap-2">
+                    <Button
+                      onClick={ButtonRevenue}
+                      variant="success"
+                      id="revenue"
+                    >
+                      Revenue
+                    </Button>
+                    <Button
+                      onClick={ButtonDepense}
+                      variant="warning"
+                      id="depense"
+                    >
+                      Dépense
+                    </Button>
+                    <Button onClick={ButtonAjuste} id="ajuste">
+                      Ajuster
+                    </Button>
                   </div>
                 </Popover.Body>
               </Popover>

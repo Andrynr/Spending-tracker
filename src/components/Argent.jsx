@@ -1,19 +1,39 @@
-import "../assets/css/Argent.css";
+import { Col, Row } from "react-bootstrap";
+import AgtCard from "./AgtCard";
 
-function Argent({ titre, icon, valeur, cardClass, titleClass }) {
+function Argent({ agts }) {
+  const argents = [
+    {
+      titre: "Solde",
+      valeur: agts.solde,
+      icon: "💲",
+      cardClass: "border-primary",
+      titleClass: "",
+    },
+    {
+      titre: "Revenue",
+      valeur: agts.revenue,
+      icon: "💰",
+      cardClass: "border-success",
+      titleClass: "text-success",
+    },
+    {
+      titre: "Dépense",
+      valeur: agts.depense,
+      icon: "💸",
+      cardClass: "border-warning",
+      titleClass: "text-warning",
+    },
+  ];
   return (
     <>
-      <div className={`card py-0 px-2 argent ${cardClass}`}>
-        <div className="card-body p-2 pb-0">
-          <p className="card-title">
-            <span>{icon}</span>
-            <span className={titleClass}>{titre}</span>
-          </p>
-          <p className="fs-2 fw-medium">
-            {valeur} <span>Ar</span>
-          </p>
-        </div>
-      </div>
+      <Row className="justify-content-between my-3">
+        {argents.map((argent, i) => (
+          <Col key={i}>
+            <AgtCard argent={argent} />
+          </Col>
+        ))}
+      </Row>
     </>
   );
 }

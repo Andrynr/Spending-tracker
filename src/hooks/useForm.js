@@ -20,9 +20,10 @@ function useForm(initialValues = {}) {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
+    const newValue =
+      type === "checkbox" ? checked : type === "number" ? Number(value) : value;
 
-    setValues((preval) => ({ ...preval, [name]: value }));
+    setValues((preval) => ({ ...preval, [name]: newValue }));
   };
 
   const resetForm = () => {
