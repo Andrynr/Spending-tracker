@@ -3,21 +3,29 @@ import {
   BarElement,
   CategoryScale,
   LinearScale,
-  Colors,
   plugins,
 } from "chart.js";
 import { callback } from "chart.js/helpers";
 import { Bar } from "react-chartjs-2";
 import { format } from "../utils/format";
-import { useState } from "react";
+import { filtrer } from "../utils/Filtre";
+import { Form } from "react-bootstrap";
+import useForm from "../hooks/useForm";
+import { generateColors } from "../utils/Colors";
 
-Chart.register(BarElement, CategoryScale, LinearScale, Colors, plugins);
+Chart.register(BarElement, CategoryScale, LinearScale, plugins);
 
-function Graph({ transactions }) {
+function Graph({ transactions, date }) {
+  const { values: filtre, handleChange } = useForm();
+
+  const transTemp = filtrer(transactions, date, filtre.type);
+
+  const Colors = generateColors(transTemp.length); //Couleurs pour les barres
+
   const donnee = Object.values(
-    transactions.reduce((acc, { categorie, montant }) => {
+    transTemp.reduce((acc, { categorie, montant, type }) => {
       if (!categorie) {
-        categorie = "Autre";
+        categorie = type === "Revenue" ? "Autre (Revenue)" : "Autre(Dépense)";
       }
       if (!acc[categorie]) {
         acc[categorie] = { categorie, total: 0 };
@@ -26,13 +34,6 @@ function Graph({ transactions }) {
       return acc;
     }, {})
   );
-  const [filtre, setFilter] = useState("");
-
-  if (donnee[filtre]) {
-    const donneeFiltree = donnee.filter((elmt) => {
-      if (elmt.categorie === filtre) return elmt;
-    });
-  }
 
   const data = {
     labels: donnee.map((item) => `${item.categorie}`),
@@ -40,6 +41,7 @@ function Graph({ transactions }) {
       {
         label: "transac",
         data: donnee.map((item) => item.total),
+        backgroundColor: Colors,
       },
     ],
   };
@@ -66,13 +68,26 @@ function Graph({ transactions }) {
           },
         },
       },
-      Colors: { enabled: true },
     },
   };
+
   return (
     <div className="my-3">
       <div className="bg-white rounded shadow p-4">
-        <h2 className="text-lg fw-semibold">Transaction mensuelle</h2>
+        <div className="d-flex justify-content-between">
+          <h2 className="text-lg fw-semibold">Transaction mensuelle</h2>
+          <Form.Select
+            className="w-auto"
+            name="type"
+            value={filtre.type}
+            onChange={handleChange}
+          >
+            <option value="All">R/D</option>
+            <option value="Revenue">Revenue</option>
+            <option value="Dépense">Dépense</option>
+          </Form.Select>
+        </div>
+
         <Bar data={data} options={options} />
       </div>
     </div>
