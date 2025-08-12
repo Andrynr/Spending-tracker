@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Form, Button, Stack } from "react-bootstrap";
 import useForm from "../hooks/useForm";
+import { categorieList } from "../utils/Categorie";
 
 function Transaction({ ajoutTransac, transType, fermer }) {
   const { values: newVals, handleChange } = useForm({
@@ -8,16 +9,7 @@ function Transaction({ ajoutTransac, transType, fermer }) {
     libelle: "",
     categorie: "",
   });
-
-  let categories = [];
-
-  if (transType === "Revenue") {
-    categories = ["Revenue", "Salaire", "Autre"];
-  } else if (transType === "Dépense") {
-    categories = ["Alimentation", "Divertissement", "Santé", "Reparation"];
-  } else {
-    categories = ["Nouveau Solde"];
-  }
+  const categories = categorieList(transType);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -74,7 +66,7 @@ function Transaction({ ajoutTransac, transType, fermer }) {
           </option>
 
           {categories.map((categorie, i) => (
-            <option key={i} value={categorie.toLocaleLowerCase()}>
+            <option key={i} value={categorie}>
               {categorie}
             </option>
           ))}

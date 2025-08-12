@@ -1,5 +1,12 @@
-import { useEffect, useRef, useState } from "react";
-import { Alert, Col, Container, Row, Tab } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import {
+  Toast,
+  Col,
+  Container,
+  Row,
+  Tab,
+  ToastContainer,
+} from "react-bootstrap";
 import "./App.css";
 import Argent from "./components/Argent.jsx";
 import Graph from "./components/Graph.jsx";
@@ -10,10 +17,11 @@ import TransacModal from "./components/TransacModal.jsx";
 
 function App() {
   const [mShow, setMShow] = useState(false);
+  const [toast, setToast] = useState({ show: false, success: true });
   const [action, setAction] = useState("");
   const [transactions, setTransaction] = useState([]);
-  const dateRef = useRef(new Date().toISOString().slice(0, 7));
-  const [dates, setdates] = useState(["2023-03", "2024-04", "2025-05"]);
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 7));
+  const [dates, setdates] = useState([]);
 
   const [argents, setArgent] = useState({
     solde: 0,
@@ -27,9 +35,7 @@ function App() {
       setMShow(true);
     };
   }, []);
-  const dateCourant = (date) => {
-    dateRef.current = date;
-  };
+
   const commit = (newTransac) => {
     const newValeurs = {
       solde: argents.solde,
@@ -50,10 +56,12 @@ function App() {
     try {
       setArgent(newValeurs);
       setTransaction([...transactions, newTransac]);
+      setToast({ show: true, success: true });
     } catch (error) {
-      alert(error);
+      setToast({ show: true, success: false });
     }
   };
+
   useEffect(() => {
     const newdates = Array.from(
       new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
@@ -75,11 +83,36 @@ function App() {
           <Col md={9}>
             <Tab.Content>
               <Tab.Pane eventKey="dashboard">
+                <ToastContainer
+                  position="top-center"
+                  className={`${toast.success ? "bg-success" : "bg-danger"} `}
+                >
+                  <Toast
+                    show={toast.show}
+                    onClose={() =>
+                      setToast({ show: false, success: toast.success })
+                    }
+                    autohide
+                    delay={3000}
+                    className="w-auto"
+                  >
+                    <Toast.Header className="justify-content-between">
+                      {toast.success
+                        ? "Transaction réussie ✅"
+                        : "Transaction échouée ❌"}
+                    </Toast.Header>
+                    <Toast.Body>
+                      {toast.success
+                        ? "La transaction s'est bien déroulé"
+                        : "Il y a eu une erreur !!!"}
+                    </Toast.Body>
+                  </Toast>
+                </ToastContainer>
                 <Header
                   onAction={setAction}
                   onShow={handleModal}
                   dates={dates}
-                  dateCrnt={dateCourant}
+                  dateCrnt={setDate}
                 />
                 <TransacModal
                   mShow={mShow}
@@ -92,7 +125,7 @@ function App() {
                 </Container>
 
                 <Container>
-                  <Graph transactions={transactions} />
+                  <Graph transactions={transactions} date={date} />
                 </Container>
               </Tab.Pane>
 

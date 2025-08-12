@@ -24,7 +24,10 @@ function Navigation() {
         </Nav.Item>
 
         <Nav.Item>
-          <Nav.Link eventKey="setting" className="d-flex bg-transparent">
+          <Nav.Link
+            eventKey="setting"
+            className="d-flex bg-transparent disabled text-secondary"
+          >
             <span className="fs-5 me-md-2">🛠</span>
             <span className="my-auto">Paramètre</span>
           </Nav.Link>
