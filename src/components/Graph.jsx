@@ -18,12 +18,12 @@ Chart.register(BarElement, CategoryScale, LinearScale, plugins);
 function Graph({ transactions, date }) {
   const { values: filtre, handleChange } = useForm();
 
-  const transTemp = filtrer(transactions, date, filtre.type);
+  const transacFiltree = filtrer(transactions, date, filtre.type);
 
-  const Colors = generateColors(transTemp.length); //Couleurs pour les barres
-
+  //Couleurs pour les barres
+  const Colors = generateColors(transacFiltree.length);
   const donnee = Object.values(
-    transTemp.reduce((acc, { categorie, montant, type }) => {
+    transacFiltree.reduce((acc, { categorie, montant, type }) => {
       if (!categorie) {
         categorie = type === "Revenue" ? "Autre (Revenue)" : "Autre(Dépense)";
       }

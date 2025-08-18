@@ -4,10 +4,10 @@ import { useEffect, useRef, useState } from "react";
 
 function Argent({ agts }) {
   const [rotation, setRotation] = useState("");
-  const SouD = useRef();
-  SouD.current = agts.solde >= 0;
+  const [argents, setArgents] = useState([]);
+  const prevSign = useRef(Math.sign(0));
 
-  const argents = [
+  const newAgts = [
     {
       titre: agts.solde < 0 ? "Dette" : "Solde",
       valeur: Math.abs(agts.solde),
@@ -30,15 +30,19 @@ function Argent({ agts }) {
       titleClass: "text-warning",
     },
   ];
-  // Animation si signe de solde change
-  useEffect(() => {
-    setRotation("rotation");
 
-    const timer = setTimeout(() => {
-      setRotation("");
-    }, 700);
-    return () => clearTimeout(timer);
-  }, [SouD.current]);
+  useEffect(() => {
+    if (Math.sign(agts.solde) !== Math.sign(prevSign.current)) {
+      setRotation("rotation");
+      setTimeout(() => {
+        setRotation("");
+        setArgents(newAgts);
+      }, 700);
+      prevSign.current = Math.sign(agts.solde);
+    } else {
+      setArgents(newAgts);
+    }
+  }, [agts]);
 
   return (
     <>

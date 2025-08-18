@@ -4,3 +4,7 @@ export const getMonth = (monthStr) => {
 
   return date.toLocaleDateString("fr-FR", { month: "long", year: "numeric" });
 };
+
+export const ISOtoDate = (tableau) => {
+  return tableau.map((item) => ({ ...item, date: new Date(item.date) }));
+};

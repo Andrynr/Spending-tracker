@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { getMonth } from "../utils/dateFormat";
 
 function Header({ onAction, onShow, dates, dateCrnt }) {
+  const boutons = document.getElementById("boutons");
   const [show, setShow] = useState(false);
   const target = useRef(null);
 
@@ -22,7 +23,11 @@ function Header({ onAction, onShow, dates, dateCrnt }) {
     onShow();
     setShow(false);
   };
-
+  window.addEventListener("click", (e) => {
+    if (!boutons.contains(e.target)) {
+      setShow(false);
+    }
+  });
   return (
     <>
       <div className="row justify-content-between m-2 mb-0 pt-2" id="header">
@@ -43,39 +48,41 @@ function Header({ onAction, onShow, dates, dateCrnt }) {
               ))}
             </Form.Select>
           </div>
-          <div className="col-auto">
-            <Button ref={target} onClick={() => setShow(!show)} id="ajouter">
-              <span className="me-2">+</span>
-              <span>Ajouter</span>
-            </Button>
+          <div className="col-auto" id="boutons">
+            <div>
+              <Button ref={target} onClick={() => setShow(!show)} id="ajouter">
+                <span className="me-2">+</span>
+                <span>Ajouter</span>
+              </Button>
+            </div>
+            <Overlay target={target.current} show={show} placement="bottom">
+              {(props) => (
+                <Popover {...props} id="action">
+                  <Popover.Body>
+                    <div className="semi-circle d-flex flex-column gap-2">
+                      <Button
+                        onClick={ButtonRevenue}
+                        variant="success"
+                        id="revenue"
+                      >
+                        Revenue
+                      </Button>
+                      <Button
+                        onClick={ButtonDepense}
+                        variant="warning"
+                        id="depense"
+                      >
+                        Dépense
+                      </Button>
+                      <Button onClick={ButtonAjuste} id="ajuste">
+                        Ajuster
+                      </Button>
+                    </div>
+                  </Popover.Body>
+                </Popover>
+              )}
+            </Overlay>
           </div>
-          <Overlay target={target.current} show={show} placement="bottom">
-            {(props) => (
-              <Popover {...props} id="action">
-                <Popover.Body>
-                  <div className="semi-circle d-flex flex-column gap-2">
-                    <Button
-                      onClick={ButtonRevenue}
-                      variant="success"
-                      id="revenue"
-                    >
-                      Revenue
-                    </Button>
-                    <Button
-                      onClick={ButtonDepense}
-                      variant="warning"
-                      id="depense"
-                    >
-                      Dépense
-                    </Button>
-                    <Button onClick={ButtonAjuste} id="ajuste">
-                      Ajuster
-                    </Button>
-                  </div>
-                </Popover.Body>
-              </Popover>
-            )}
-          </Overlay>
         </div>
       </div>
     </>

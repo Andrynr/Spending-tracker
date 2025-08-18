@@ -14,26 +14,30 @@ import Header from "./components/Header.jsx";
 import List from "./components/List.jsx";
 import Navigation from "./components/Navigation.jsx";
 import TransacModal from "./components/TransacModal.jsx";
+import { ISOtoDate } from "./utils/dateFormat.js";
 
 function App() {
   const [mShow, setMShow] = useState(false);
   const [toast, setToast] = useState({ show: false, success: true });
   const [action, setAction] = useState("");
-  const [transactions, setTransaction] = useState([]);
   const [date, setDate] = useState(new Date().toISOString().slice(0, 7));
   const [dates, setdates] = useState([]);
 
-  const [argents, setArgent] = useState({
-    solde: 0,
-    revenue: 0,
-    depense: 0,
+  // Données enregistrées
+  const [transactions, setTransaction] = useState(() => {
+    const savedTransac = JSON.parse(localStorage.getItem("transactions"));
+    return savedTransac ? ISOtoDate(savedTransac) : [];
+  });
+  const [argents, setArgent] = useState(() => {
+    const savedArgents = JSON.parse(localStorage.getItem("argents"));
+    return savedArgents ? savedArgents : { solde: 0, revenue: 0, depense: 0 };
   });
 
   useEffect(() => {
-    return () => {
+    if (Object.values(argents).every((v) => v === 0)) {
       setAction("Solde");
       setMShow(true);
-    };
+    }
   }, []);
 
   const commit = (newTransac) => {
@@ -61,6 +65,11 @@ function App() {
       setToast({ show: true, success: false });
     }
   };
+
+  useEffect(() => {
+    localStorage.setItem("argents", JSON.stringify(argents));
+    localStorage.setItem("transactions", JSON.stringify(transactions));
+  }, [transactions]);
 
   useEffect(() => {
     const newdates = Array.from(
