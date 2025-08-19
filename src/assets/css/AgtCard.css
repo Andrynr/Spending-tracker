@@ -1,16 +1,9 @@
 #Solde,
 #Dette {
   transition: transform 0.7s ease;
+  transform-style: preserve-3d;
 }
 #Solde.rotation,
 #Dette.rotation {
   transform: rotateY(90deg);
-}
-#Solde div,
-#Dette div {
-  opacity: 1;
-}
-#Solde.rotation div,
-#Dette.rotation div {
-  opacity: 0.2;
 }
