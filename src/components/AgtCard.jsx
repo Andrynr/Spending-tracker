@@ -4,7 +4,7 @@ import "../assets/css/AgtCard.css";
 function AgtCard({ argent, rotation }) {
   return (
     <div
-      className={`card py-0 px-2 argent ${argent.cardClass} ${rotation}`}
+      className={`card py-0 px-1 argent ${argent.cardClass} ${rotation}`}
       id={argent.titre}
     >
       <div className="card-body p-2 pb-0">

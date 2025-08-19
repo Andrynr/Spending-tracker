@@ -31,7 +31,7 @@ function Argent({ agts }) {
     },
   ];
 
-  useEffect(() => {
+  const soldeMAJ = () => {
     if (Math.sign(agts.solde) !== Math.sign(prevSign.current)) {
       setRotation("rotation");
       setTimeout(() => {
@@ -42,11 +42,15 @@ function Argent({ agts }) {
     } else {
       setArgents(newAgts);
     }
+  };
+
+  useEffect(() => {
+    soldeMAJ();
   }, [agts]);
 
   return (
     <>
-      <Row className="justify-content-between my-3">
+      <Row className="justify-content-between my-3 gy-2">
         {argents.map((argent, i) => (
           <Col key={i}>
             <AgtCard argent={argent} rotation={rotation} />

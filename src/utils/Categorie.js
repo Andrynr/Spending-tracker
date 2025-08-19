@@ -4,7 +4,13 @@ export const categorieList = (transacType) => {
   if (transacType === "Revenue") {
     categories = ["Revenue", "Salaire"];
   } else if (transacType === "Dépense") {
-    categories = ["Nourriture", "Divertissement", "Santé", "Reparation"];
+    categories = [
+      "Nourriture",
+      "Divertissement",
+      "Santé",
+      "Reparation",
+      "Bien-être",
+    ];
   } else if (transacType === "Solde") {
     categories = ["Nouveau Solde"];
   } else
@@ -15,6 +21,7 @@ export const categorieList = (transacType) => {
       "Divertissement",
       "Santé",
       "Reparation",
+      "Bien-être",
       "Nouveau Solde",
       "Autre",
     ];
