@@ -13,17 +13,19 @@ A simple personal finance tracking application built with React + Vite. It helps
 
 ## 🛠 Technologies
 
-- React
 - HTML / CSS
 - JavaScript
+- React
 - Bootstrap
+- React-bootstrap
+- Chart.js (via react-chartjs-2)
 
 ## 🚀 Installation & Setup
 
 ```bash
 git clone https://github.com/andrynr/spending-tracker.git
 cd spending-tracker
-npm install
+npm install react-bootstrap bootstrap chart.js react-chartjs-2
 npm run dev
 ```
 
