@@ -50,7 +50,7 @@ function Argent({ agts }) {
 
   return (
     <>
-      <Row className="justify-content-between my-3 gy-2">
+      <Row className="row-cols-1 row-cols-sm-3 justify-content-between my-3 gy-2">
         {argents.map((argent, i) => (
           <Col key={i}>
             <AgtCard argent={argent} rotation={rotation} />

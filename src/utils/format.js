@@ -1,5 +1,5 @@
 export const format = (valeur) =>
-  new Intl.NumberFormat("mg-MG", {
+  new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "MGA",
     minimumFractionDigits: 0,

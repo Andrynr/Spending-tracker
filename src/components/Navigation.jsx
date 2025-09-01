@@ -1,4 +1,5 @@
 import { Nav } from "react-bootstrap";
+import "../assets/Navigation.css";
 
 function Navigation() {
   return (
@@ -10,7 +11,7 @@ function Navigation() {
             className="d-flex flex-start bg-transparent"
           >
             <span className="fs-5 me-md-2">📊</span>
-            <span className="my-auto">Tableau de bord</span>
+            <span className="my-auto d-none d-md-flex">Tableau de bord</span>
           </Nav.Link>
         </Nav.Item>
         <Nav.Item>
@@ -19,7 +20,7 @@ function Navigation() {
             className="d-flex flex-start bg-transparent"
           >
             <span className="fs-5 me-md-2">🧮</span>
-            <span>Transactions</span>
+            <span className="d-none d-md-flex">Transactions</span>
           </Nav.Link>
         </Nav.Item>
 
@@ -29,7 +30,7 @@ function Navigation() {
             className="d-flex bg-transparent disabled text-secondary"
           >
             <span className="fs-5 me-md-2">🛠</span>
-            <span className="my-auto">Paramètre</span>
+            <span className="my-auto d-none d-md-flex">Paramètre</span>
           </Nav.Link>
         </Nav.Item>
       </Nav>

@@ -24,7 +24,7 @@ function Header({ onAction, onShow, dates, dateCrnt }) {
     setShow(false);
   };
   window.addEventListener("click", (e) => {
-    if (!boutons.contains(e.target)) {
+    if (show && !boutons.contains(e.target)) {
       setShow(false);
     }
   });
@@ -40,6 +40,7 @@ function Header({ onAction, onShow, dates, dateCrnt }) {
             <Form.Select
               onChange={(e) => dateCrnt(e.target.value)}
               className="text-capitalize"
+              name="date"
             >
               {dates?.map((date, i) => (
                 <option value={date} key={date}>
