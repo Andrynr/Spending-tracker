@@ -72,25 +72,36 @@ function Graph({ transactions, date }) {
   };
 
   return (
-    <div className="my-3">
-      <div className="bg-white rounded shadow p-4">
-        <div className="d-flex justify-content-between">
-          <h2 className="text-lg fw-semibold">Transaction mensuelle</h2>
-          <Form.Select
-            className="w-auto"
-            name="type"
-            value={filtre.type}
-            onChange={handleChange}
-          >
-            <option value="All">R/D</option>
-            <option value="Revenue">Revenue</option>
-            <option value="Dépense">Dépense</option>
-          </Form.Select>
-        </div>
-
-        <Bar data={data} options={options} />
+    <>
+      <div className="d-block d-sm-none shadow-lg p-3">
+        <p
+          className="display-4 fw-medium text-secondary"
+          style={{ fontFamily: "Verdana, Geneva, sans-serif" }}
+        >
+          Oups ! La largeur de votre écran est un peu trop petite pour afficher
+          la graphe.
+        </p>
       </div>
-    </div>
+      <div className="my-3 d-none d-sm-block">
+        <div className="bg-white rounded shadow p-4">
+          <div className="d-flex justify-content-between">
+            <h2 className="text-lg fw-semibold">Transaction mensuelle</h2>
+            <Form.Select
+              className="w-auto"
+              name="type"
+              value={filtre.type}
+              onChange={handleChange}
+            >
+              <option value="All">R/D</option>
+              <option value="Revenue">Revenue</option>
+              <option value="Dépense">Dépense</option>
+            </Form.Select>
+          </div>
+
+          <Bar data={data} options={options} />
+        </div>
+      </div>
+    </>
   );
 }
 

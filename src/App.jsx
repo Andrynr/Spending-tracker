@@ -85,7 +85,7 @@ function App() {
   return (
     <>
       <Tab.Container defaultActiveKey="dashboard">
-        <Row className=" m-0 h-100">
+        <Row className=" m-0 align-content-start">
           <Col md={3} className="bg-dark p-md-3" id="navigation">
             <Navigation />
           </Col>
@@ -129,17 +129,17 @@ function App() {
                   transType={action}
                   fermer={setMShow}
                 />
-                <Container>
+                <Container fluid="md">
                   <Argent agts={argents} />
                 </Container>
 
-                <Container>
+                <Container fluid="md">
                   <Graph transactions={transactions} date={date} />
                 </Container>
               </Tab.Pane>
 
               <Tab.Pane eventKey="transactions">
-                <Container>
+                <Container fluid="md" className="py-3">
                   <List transactions={transactions} />
                 </Container>
               </Tab.Pane>
