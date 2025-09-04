@@ -21,7 +21,6 @@ function App() {
   const [toast, setToast] = useState({ show: false, success: true });
   const [action, setAction] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 7));
-  const [dates, setdates] = useState([]);
 
   // Données enregistrées
   const [transactions, setTransaction] = useState(() => {
@@ -40,25 +39,29 @@ function App() {
     }
   }, []);
 
-  const commit = (newTransac) => {
-    const newValeurs = {
-      solde: argents.solde,
-      revenue: argents.revenue,
-      depense: argents.depense,
-    };
+  const MAJArgents = (newTransac) => {
+    let { solde, revenue, depense } = argents;
 
-    if (action === "Solde") {
-      newValeurs.solde = newTransac.montant;
-    } else if (action === "Revenue") {
-      newValeurs.solde += newTransac.montant;
-      newValeurs.revenue += newTransac.montant;
-    } else {
-      newValeurs.solde -= newTransac.montant;
-      newValeurs.depense += newTransac.montant;
+    switch (action) {
+      case "Solde":
+        solde = newTransac.montant;
+        break;
+      case "Revenue":
+        solde += newTransac.montant;
+        revenue += newTransac.montant;
+        break;
+      case "Depense":
+        solde -= newTransac.montant;
+        depense += newTransac.montant;
+        break;
     }
 
+    return { solde, revenue, depense };
+  };
+
+  const commit = (newTransac) => {
     try {
-      setArgent(newValeurs);
+      setArgent(MAJArgents(newTransac));
       setTransaction([...transactions, newTransac]);
       setToast({ show: true, success: true });
     } catch (error) {
@@ -69,27 +72,26 @@ function App() {
   useEffect(() => {
     localStorage.setItem("argents", JSON.stringify(argents));
     localStorage.setItem("transactions", JSON.stringify(transactions));
-  }, [transactions]);
+  }, [transactions, argents]);
 
-  useEffect(() => {
-    const newdates = Array.from(
-      new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
-    );
-    setdates(newdates);
-  }, [transactions]);
-
+  // Gestion du modal du formulaire
   const handleModal = () => {
     setMShow(!mShow);
   };
 
+  // Dates des transactions
+  const dates = Array.from(
+    new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
+  ).reverse();
+
   return (
     <>
       <Tab.Container defaultActiveKey="dashboard">
-        <Row className=" m-0 align-content-start">
+        <Row className=" m-0 align-content-start h-100">
           <Col md={3} className="bg-dark p-md-3" id="navigation">
             <Navigation />
           </Col>
-          <Col md={9}>
+          <Col md={9} className="min-vh-100">
             <Tab.Content>
               <Tab.Pane eventKey="dashboard">
                 <ToastContainer
@@ -140,7 +142,7 @@ function App() {
 
               <Tab.Pane eventKey="transactions">
                 <Container fluid="md" className="py-3">
-                  <List transactions={transactions} />
+                  <List transactions={transactions} dates={dates} />
                 </Container>
               </Tab.Pane>
               <Tab.Pane eventKey="setting">

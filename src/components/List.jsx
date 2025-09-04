@@ -1,22 +1,18 @@
+import { Form } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
 import "../assets/css/List.css";
-import { format } from "../utils/format";
-import { filtrer } from "../utils/Filtre";
-import { Container, Form } from "react-bootstrap";
-import { useEffect, useRef } from "react";
 import useForm from "../hooks/useForm";
 import { categorieList } from "../utils/Categorie";
+import { filtrer } from "../utils/Filtre";
+import { format } from "../utils/format";
 
-function List({ transactions }) {
+function List({ transactions, dates }) {
   const { values: filtres, handleChange } = useForm({
     date: new Date().toISOString().slice(0, 7),
     type: "",
     categorie: "",
     recherche: "",
   });
-  const dates = Array.from(
-    new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
-  );
 
   const filtredTransactions = filtrer(
     transactions,
