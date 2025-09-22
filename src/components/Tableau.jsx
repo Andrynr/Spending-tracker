@@ -30,6 +30,10 @@ function Tableau({ transactions, dates, modifTransactions }) {
   filtredTransactions.reverse(); // Récente d'abord
 
   const categories = categorieList(filtres.type); // Catégories selon la type de transaction
+
+  // ----------------------------------------
+  // Modification d'une transaction
+  // ----------------------------------------
   const [anciTrans, setAnciTrans] = useState({});
 
   // Gestionnaire des modals
