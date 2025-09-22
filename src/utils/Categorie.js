@@ -1,3 +1,8 @@
+/**
+ *
+ * @param {String} transacType - Type de transaction
+ * @returns Une liste de catégories.
+ */
 export const categorieList = (transacType) => {
   let categories = [];
 

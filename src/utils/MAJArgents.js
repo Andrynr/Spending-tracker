@@ -1,10 +1,9 @@
 /**
  *
- * @param {object} newTransac - Nouvelle transaction à effectuer
- * @param {Array} argents - Tableau : Solde, Revenue, Dépense
+ * @param {Object} newTransac - Nouvelle transaction à effectuer
+ * @param {Object} argents - Objet : Solde, Revenue, Dépense
  * @returns
  */
-
 export const MAJArgents = ({ newTransac, argents }) => {
   let { solde, revenue, depense } = argents;
 
@@ -25,6 +24,15 @@ export const MAJArgents = ({ newTransac, argents }) => {
   return { solde, revenue, depense };
 };
 
+/**
+ *
+ * @param {Object} anciTransac - Transaction : pour déduire le montant de $argents
+ * @param {Object} argents - Solde, Revenue, Depense
+ * @returns {Object} argents avec les valeurs déduites
+ * - Solde
+ * - Revenue
+ * - Depense
+ */
 export const deduireArgent = ({ anciTransac, argents }) => {
   const tempTransac = {
     montant: -anciTransac.montant,
@@ -34,6 +42,13 @@ export const deduireArgent = ({ anciTransac, argents }) => {
   return MAJArgents({ newTransac: tempTransac, argents });
 };
 
+/**
+ *
+ * @param {Object} argents
+ * @param {Object} anciTransac - Transaction avec l'ancienne montant
+ * @param {Object} nouvTransac - Transaction avec le nouveau montant
+ * @returns
+ */
 export const modifArgents = (argents, anciTransac, nouvTransac) => {
   // On déduit le montant de l'argent d'abord
   // Après on ajoute le nouveau montant

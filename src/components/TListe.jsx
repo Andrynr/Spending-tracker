@@ -1,8 +1,5 @@
-import { format } from "../utils/format";
 import "../assets/css/TListe.css";
-import TransacModal from "./TransacModal";
-import { useState } from "react";
-import SupprModal from "./SupprModal";
+import { format } from "../utils/format";
 /**
  *Un tableau de transactions
  *
