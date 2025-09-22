@@ -3,10 +3,12 @@ import AgtCard from "./AgtCard";
 import { useEffect, useRef, useState } from "react";
 
 function Argent({ agts }) {
+  // Déclaration des States
   const [rotation, setRotation] = useState("");
   const [argents, setArgents] = useState([]);
   const prevSign = useRef(Math.sign(0));
 
+  // const : Donnée en préparation pour chaque carte
   const newAgts = [
     {
       titre: agts.solde < 0 ? "Dette" : "Solde",
@@ -31,6 +33,8 @@ function Argent({ agts }) {
     },
   ];
 
+  // Fonction - Mis à jour des cartes 
+  // Rotation si Solde change de signe
   const soldeMAJ = () => {
     if (Math.sign(agts.solde) !== Math.sign(prevSign.current)) {
       setRotation("rotation");
