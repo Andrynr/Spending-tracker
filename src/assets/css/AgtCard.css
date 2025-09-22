@@ -7,3 +7,8 @@
 #Dette.rotation {
   transform: rotateY(90deg);
 }
+
+div.card:hover {
+  translate: 0 -2px;
+  box-shadow: 1px 1px 6px 1px #05050550;
+}

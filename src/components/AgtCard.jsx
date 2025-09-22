@@ -1,6 +1,14 @@
 import { format } from "../utils/format";
 import "../assets/css/AgtCard.css";
-
+/**
+ * 
+ * @param {object} argent
+ * -cardClass - Classe de la carte
+ * -titre
+ * -icon
+ * -titleClass - Classe du titre
+ * -valeur - valeur de l'argent 
+ */
 function AgtCard({ argent, rotation }) {
   return (
     <div

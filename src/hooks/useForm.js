@@ -18,6 +18,7 @@ import { useState } from "react";
 function useForm(initialValues = {}) {
   const [values, setValues] = useState(initialValues);
 
+  // Fonction : gère les changements de champs
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const newValue =

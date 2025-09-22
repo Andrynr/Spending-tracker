@@ -1,28 +1,34 @@
 import { useEffect, useState } from "react";
 import {
-  Toast,
   Col,
   Container,
   Row,
   Tab,
+  Toast,
   ToastContainer,
 } from "react-bootstrap";
 import "./App.css";
 import Argent from "./components/Argent.jsx";
 import Graph from "./components/Graph.jsx";
 import Header from "./components/Header.jsx";
-import List from "./components/List.jsx";
 import Navigation from "./components/Navigation.jsx";
+import Tableau from "./components/Tableau.jsx";
 import TransacModal from "./components/TransacModal.jsx";
 import { ISOtoDate } from "./utils/dateFormat.js";
+import { deduireArgent, MAJArgents, modifArgents } from "./utils/MAJArgents.js";
+import { modifTransaction, suprTransaction } from "./utils/MAJTransactions.js";
 
 function App() {
-  const [mShow, setMShow] = useState(false);
-  const [toast, setToast] = useState({ show: false, success: true });
-  const [action, setAction] = useState("");
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 7));
+  // ----------------------
+  // Déclaration des états
+  // ----------------------
 
-  // Données enregistrées
+  const [mShow, setMShow] = useState(false); // Affichage de la modal
+  const [toast, setToast] = useState({ show: false, success: true }); // Affichage du toast(notification)
+  const [action, setAction] = useState("");
+  const [date, setDate] = useState(new Date().toISOString().slice(0, 7)); // Date sélectionnés(YYYY-MM)
+
+  // Données enregistrées(localStorage)
   const [transactions, setTransaction] = useState(() => {
     const savedTransac = JSON.parse(localStorage.getItem("transactions"));
     return savedTransac ? ISOtoDate(savedTransac) : [];
@@ -32,6 +38,7 @@ function App() {
     return savedArgents ? savedArgents : { solde: 0, revenue: 0, depense: 0 };
   });
 
+  // Au premier rendu : si aucun argent n'est enregistré, ouvrir la modal avec "Solde"
   useEffect(() => {
     if (Object.values(argents).every((v) => v === 0)) {
       setAction("Solde");
@@ -39,29 +46,10 @@ function App() {
     }
   }, []);
 
-  const MAJArgents = (newTransac) => {
-    let { solde, revenue, depense } = argents;
-
-    switch (action) {
-      case "Solde":
-        solde = newTransac.montant;
-        break;
-      case "Revenue":
-        solde += newTransac.montant;
-        revenue += newTransac.montant;
-        break;
-      case "Depense":
-        solde -= newTransac.montant;
-        depense += newTransac.montant;
-        break;
-    }
-
-    return { solde, revenue, depense };
-  };
-
+  // Fonction : Valide la transaction
   const commit = (newTransac) => {
     try {
-      setArgent(MAJArgents(newTransac));
+      setArgent(MAJArgents({ newTransac, argents }));
       setTransaction([...transactions, newTransac]);
       setToast({ show: true, success: true });
     } catch (error) {
@@ -69,6 +57,27 @@ function App() {
     }
   };
 
+  const modifTransactions = (actionTrans, transac, ancienneTransaction) => {
+    switch (actionTrans) {
+      case "modifier":
+        setTransaction(modifTransaction(transactions, transac));
+        setArgent(modifArgents(argents, ancienneTransaction, transac));
+
+        break;
+      case "supprimer":
+        setTransaction(suprTransaction(transactions, transac.date));
+
+        if (transac.annuler) {
+          setArgent(deduireArgent({ anciTransac: transac, argents }));
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  // Enregistrament local(argents, transactions)
   useEffect(() => {
     localStorage.setItem("argents", JSON.stringify(argents));
     localStorage.setItem("transactions", JSON.stringify(transactions));
@@ -142,7 +151,11 @@ function App() {
 
               <Tab.Pane eventKey="transactions">
                 <Container fluid="md" className="py-3">
-                  <List transactions={transactions} dates={dates} />
+                  <Tableau
+                    transactions={transactions}
+                    dates={dates}
+                    modifTransactions={modifTransactions}
+                  />
                 </Container>
               </Tab.Pane>
               <Tab.Pane eventKey="setting">

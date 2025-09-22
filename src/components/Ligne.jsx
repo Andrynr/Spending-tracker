@@ -1,4 +1,10 @@
 import Button from "react-bootstrap";
+/**
+ * Ligne de transaction
+ * 
+ * @param {object} transaction 
+ * @returns 
+ */
 function Li(transaction) {
   return (
     <tr>

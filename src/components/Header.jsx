@@ -4,8 +4,11 @@ import { useState, useRef } from "react";
 import { getMonth } from "../utils/dateFormat";
 
 function Header({ onAction, onShow, dates, dateCrnt }) {
+  // Boutons d'ajouts de transaction
   const boutons = document.getElementById("boutons");
+  // Etat de l'affichage du tooltip
   const [show, setShow] = useState(false);
+  // Réfference du popover
   const target = useRef(null);
 
   const ButtonRevenue = () => {
@@ -23,11 +26,14 @@ function Header({ onAction, onShow, dates, dateCrnt }) {
     onShow();
     setShow(false);
   };
+
+  // Fermer le popover si on clique ailleur
   window.addEventListener("click", (e) => {
     if (show && !boutons.contains(e.target)) {
       setShow(false);
     }
   });
+  
   return (
     <>
       <div className="row justify-content-between m-2 mb-0 pt-2" id="header">

@@ -16,12 +16,16 @@ import { generateColors } from "../utils/Colors";
 Chart.register(BarElement, CategoryScale, LinearScale, plugins);
 
 function Graph({ transactions, date }) {
+  // State(useForm) pour la filtre
   const { values: filtre, handleChange } = useForm();
 
+  // Transactions à afficher dans la graphe
   const transacFiltree = filtrer(transactions, date, filtre.type);
 
   //Couleurs pour les barres
   const Colors = generateColors(transacFiltree.length);
+
+  // Transactions réduites par categorie
   const donnee = Object.values(
     transacFiltree.reduce((acc, { categorie, montant, type }) => {
       if (!categorie) {
@@ -35,6 +39,8 @@ function Graph({ transactions, date }) {
     }, {})
   );
 
+  //--------------------
+  //Données de la graphe
   const data = {
     labels: donnee.map((item) => `${item.categorie}`),
     datasets: [
@@ -46,6 +52,7 @@ function Graph({ transactions, date }) {
     ],
   };
 
+  // Options de la graphe
   const options = {
     plugins: {
       tooltip: {

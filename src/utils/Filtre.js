@@ -1,3 +1,13 @@
+/**
+ * 
+ * @param {Array} tableau 
+ * @param {string} date 
+ * @param {string} type 
+ * @param {string} categ 
+ * @param {string} recherche 
+ * @returns {Array} - Tableau d'objet filtré
+ */
+
 export const filtrer = (tableau, date, type, categ, recherche) => {
   return tableau.filter((item) => {
     const memeDate = item.date.toISOString().slice(0, 7) === date;
