@@ -1,28 +1,31 @@
 import { format } from "../utils/format";
 import "../assets/css/AgtCard.css";
+import { Card } from "react-bootstrap";
 /**
- * 
+ *
  * @param {object} argent
  * -cardClass - Classe de la carte
  * -titre
  * -icon
  * -titleClass - Classe du titre
- * -valeur - valeur de l'argent 
+ * -valeur - valeur de l'argent
  */
 function AgtCard({ argent, rotation }) {
   return (
-    <div
-      className={`card py-0 px-1 argent ${argent.cardClass} ${rotation}`}
+    <Card
+      className={` py-0 px-1 argent h-scale ${argent.cardClass} ${rotation}`}
       id={argent.titre}
     >
-      <div className="card-body p-2 pb-0">
-        <p className="card-title">
+      <Card.Body className=" p-2 pb-0">
+        <Card.Title>
           <span className="me-2">{argent.icon}</span>
           <span className={argent.titleClass}>{argent.titre}</span>
-        </p>
-        <p className="fs-2 fw-medium">{format(argent.valeur)}</p>
-      </div>
-    </div>
+        </Card.Title>
+        <Card.Text className="fs-2 fw-medium">
+          {format(argent.valeur)}
+        </Card.Text>
+      </Card.Body>
+    </Card>
   );
 }
 

@@ -1,13 +1,37 @@
-import { Button, Container, Form, Stack } from "react-bootstrap";
+import { Button, Container, Form, Stack, Toast } from "react-bootstrap";
 import useForm from "../hooks/useForm";
+import { useState } from "react";
 
 function Parametre({ reinitialise }) {
+  // Déclaration du state des champs du formulaire
   const { values, handleChange, resetForm } = useForm({
     Argent: false,
     Transaction: false,
   });
 
+  // --------------------------
+  // Gestion du Pop-in
+  // Etat d'affichage du Pop-in
+  const [show, setShow] = useState(false);
+  // Données du Pop-in
+  const erreurPopIn = {
+    class: "bg-danger",
+    titre: "Réinitialisation échouée ❌",
+    message: "Il y a eu une erreur lors de la réinitialisation",
+  };
+  const succesPopIn = {
+    class: "bg-success",
+    titre: "Réinitialisation réussie ✅",
+    message: "La réinitialisation s'est bien déroulée ",
+  };
+  // Fonction qui gère l'affichage
+  const PopIn = () => {
+    setShow(true);
+  };
+
+  // Fonction de validation de la réinitialisation
   const valider = (e) => {
+    e.preventDefault();
     const reinit = {
       argents: values.Argent,
       transacs: values.Transaction,
@@ -17,6 +41,7 @@ function Parametre({ reinitialise }) {
     reinitialise(reinit);
   };
 
+  // Booléen du bouton Réinitialiser
   const disabled = Object.values(values).some((v) => v === true);
 
   return (

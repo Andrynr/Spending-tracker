@@ -23,6 +23,7 @@ import {
 } from "./utils/MAJArgents.js";
 import { modifTransaction, suprTransaction } from "./utils/MAJTransactions.js";
 import Parametre from "./components/Parametre.jsx";
+import PopIn from "./components/PopIn.jsx";
 
 function App() {
   // ----------------------
@@ -30,9 +31,37 @@ function App() {
   // ----------------------
 
   const [mShow, setMShow] = useState(false); // Affichage de la modal
-  const [toast, setToast] = useState({ show: false, success: true }); // Affichage du toast(notification)
+  const [popIn, setPopIn] = useState({ show: false, info: {} }); // Affichage du toast(notification)
   const [action, setAction] = useState("");
   const [date, setDate] = useState(new Date().toISOString().slice(0, 7)); // Date sélectionnés(YYYY-MM)
+
+  // ----------------------
+  //Déclaration des constantes
+  // Pop-in de réinitialisation
+  const erreurReinit = {
+    class: "bg-danger mb-5",
+    position: "bottom-center",
+    titre: "Réinitialisation échouée ❌",
+    message: "Il y a eu une erreur lors de la réinitialisation",
+  };
+  const succesReinit = {
+    class: "bg-success mb-5",
+    position: "bottom-center",
+    titre: "Réinitialisation réussie ✅",
+    message: "La réinitialisation a été effectuée avec succès ",
+  };
+  // Pop-in de transaction
+  const erreurTransac = {
+    class: "bg-danger",
+    titre: "Transaction échouée ❌",
+    message: "Il y a eu une erreur lors de la transaction !!!",
+  };
+  const succesTransac = {
+    class: "bg-success",
+    titre: "Transaction réussie ✅",
+    message: "La transaction a été effectuée avec succès ",
+  };
+  // -------------------------------
 
   // Données enregistrées(localStorage)
   const [transactions, setTransaction] = useState(() => {
@@ -57,9 +86,9 @@ function App() {
     try {
       setArgent(MAJArgents({ newTransac, argents }));
       setTransaction([...transactions, newTransac]);
-      setToast({ show: true, success: true });
+      setPopIn({ show: true, info: succesTransac });
     } catch (error) {
-      setToast({ show: true, success: false });
+      setPopIn({ show: true, info: erreurTransac });
     }
   };
 
@@ -100,12 +129,22 @@ function App() {
     dates.unshift(new Date().toISOString().slice(0, 7));
 
   const reinitialise = (aReinit) => {
-    if (aReinit.argents) setArgent(initialise);
-    if (aReinit.transacs) setTransaction([]);
+    try {
+      if (aReinit.argents) setArgent(initialise);
+      if (aReinit.transacs) setTransaction([]);
+      setPopIn({ show: true, info: succesReinit });
+    } catch (error) {
+      setPopIn({ show: true, info: erreurReinit });
+    }
   };
 
   return (
     <>
+      <PopIn
+        info={popIn.info}
+        affiche={popIn.show}
+        ferme={() => setPopIn({ ...popIn, show: false })}
+      />
       <Tab.Container defaultActiveKey="dashboard">
         <Row className=" m-0 align-content-start h-100">
           <Col md={3} className="bg-dark p-md-3" id="navigation">
@@ -114,31 +153,6 @@ function App() {
           <Col md={9} className="min-vh-100">
             <Tab.Content>
               <Tab.Pane eventKey="dashboard">
-                <ToastContainer
-                  position="top-center"
-                  className={`${toast.success ? "bg-success" : "bg-danger"} `}
-                >
-                  <Toast
-                    show={toast.show}
-                    onClose={() =>
-                      setToast({ show: false, success: toast.success })
-                    }
-                    autohide
-                    delay={3000}
-                    className="w-auto"
-                  >
-                    <Toast.Header className="justify-content-between">
-                      {toast.success
-                        ? "Transaction réussie ✅"
-                        : "Transaction échouée ❌"}
-                    </Toast.Header>
-                    <Toast.Body>
-                      {toast.success
-                        ? "La transaction s'est bien déroulé"
-                        : "Il y a eu une erreur !!!"}
-                    </Toast.Body>
-                  </Toast>
-                </ToastContainer>
                 <Header
                   onAction={setAction}
                   onShow={handleModal}

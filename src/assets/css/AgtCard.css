@@ -8,7 +8,10 @@
   transform: rotateY(90deg);
 }
 
-div.card:hover {
-  translate: 0 -2px;
-  box-shadow: 1px 1px 6px 1px #05050550;
+.h-scale {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.h-scale:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 16px #05050550;
 }
