@@ -14,3 +14,9 @@ export const getMonth = (monthStr) => {
 export const ISOtoDate = (tableau) => {
   return tableau.map((item) => ({ ...item, date: new Date(item.date) }));
 };
+
+export const getDates = (tableau) => {
+  return Array.from(
+    new Set(tableau.map((item) => item.date.toISOString().slice(0, 7)))
+  ).reverse();
+};

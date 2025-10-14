@@ -18,7 +18,6 @@ function Transaction({ ajoutTransac, transType, fermer, ancienneTransaction }) {
     libelle: ancienneTransaction ? ancienneTransaction.libelle : "",
     categorie: ancienneTransaction ? ancienneTransaction.categorie : "",
   });
-  console.log(ancienneTransaction, newVals);
 
   // Type de transaction
   const newTransType = ancienneTransaction

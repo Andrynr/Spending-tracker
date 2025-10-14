@@ -56,3 +56,8 @@ export const modifArgents = (argents, anciTransac, nouvTransac) => {
 
   return MAJArgents({ argents: tmpArgents, newTransac: nouvTransac });
 };
+
+// Initialise l'objet argent (0)
+export const initialise = () => {
+  return { solde: 0, revenue: 0, depense: 0 };
+};

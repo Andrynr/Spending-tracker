@@ -13,7 +13,7 @@ import TransacModal from "./TransacModal";
 function Tableau({ transactions, dates, modifTransactions }) {
   // Déclaration des states pour le filtre
   const { values: filtres, handleChange } = useForm({
-    date: new Date().toISOString().slice(0, 7),
+    date: dates[0],
     type: "",
     categorie: "",
     recherche: "",
@@ -67,50 +67,53 @@ function Tableau({ transactions, dates, modifTransactions }) {
   return (
     <>
       <h2 className="text-lg text-start fw-semibold">Liste des transactions</h2>
-      <div className=" d-flex justify-content-between pt-3" id="filtre">
-        <Form.Control
-          type="text"
-          placeholder="Rechercher"
-          value={filtres.recherche}
-          name="recherche"
-          onChange={handleChange}
-        />
-        <Form.Select
-          value={filtres.categorie}
-          onChange={handleChange}
-          name="categorie"
-        >
-          <option value="All">Tout</option>
-          {categories.map((item) => (
-            <option key={item} value={item}>
-              {item}
-            </option>
-          ))}
-        </Form.Select>
-        <Form.Select
-          value={filtres.type}
-          onChange={handleChange}
-          name="type"
-          id="type"
-        >
-          <option value="All">Tous</option>
-          <option value="Revenue">Revenue</option>
-          <option value="Dépense">Dépense</option>
-        </Form.Select>
-        <Form.Select
-          className="text-capitalize"
-          value={filtres.date}
-          onChange={handleChange}
-          name="date"
-          id="date"
-        >
-          {dates.map((date) => (
-            <option key={date} value={date}>
-              {getMonth(date)}
-            </option>
-          ))}
-        </Form.Select>
-      </div>
+
+      <section>
+        <div className=" d-flex justify-content-between pt-3" id="filtre">
+          <Form.Control
+            type="text"
+            placeholder="Rechercher"
+            value={filtres.recherche}
+            name="recherche"
+            onChange={handleChange}
+          />
+          <Form.Select
+            value={filtres.categorie}
+            onChange={handleChange}
+            name="categorie"
+          >
+            <option value="All">Tout</option>
+            {categories.map((item) => (
+              <option key={item} value={item}>
+                {item}
+              </option>
+            ))}
+          </Form.Select>
+          <Form.Select
+            value={filtres.type}
+            onChange={handleChange}
+            name="type"
+            id="type"
+          >
+            <option value="All">Tous</option>
+            <option value="Revenue">Revenue</option>
+            <option value="Dépense">Dépense</option>
+          </Form.Select>
+          <Form.Select
+            className="text-capitalize"
+            value={filtres.date}
+            onChange={handleChange}
+            name="date"
+            id="date"
+          >
+            {dates.map((date) => (
+              <option key={date} value={date}>
+                {getMonth(date)}
+              </option>
+            ))}
+          </Form.Select>
+        </div>
+      </section>
 
       <Table className="mt-2 table-responsive table-striped">
         <thead>

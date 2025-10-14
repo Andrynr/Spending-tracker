@@ -27,7 +27,7 @@ function Navigation() {
         <Nav.Item>
           <Nav.Link
             eventKey="setting"
-            className="d-flex bg-transparent disabled text-secondary"
+            className="d-flex bg-transparent text-secondary"
           >
             <span className="fs-5 me-md-2">🛠</span>
             <span className="my-auto d-none d-md-flex">Paramètre</span>

@@ -11,7 +11,7 @@ import { useState } from "react";
  * _ 'setValues' : Setter direct si besoin de mise à jour manuelle
  *
  * @example
- * const { values, handleChange, resForm } = useForm({ nom: '', email: ''});
+ * const { values, handleChange, resetForm } = useForm({ nom: '', email: ''});
  * <input name="nom" value={values.nom} onChange={handleChange} />
  */
 

@@ -14,9 +14,15 @@ import Header from "./components/Header.jsx";
 import Navigation from "./components/Navigation.jsx";
 import Tableau from "./components/Tableau.jsx";
 import TransacModal from "./components/TransacModal.jsx";
-import { ISOtoDate } from "./utils/dateFormat.js";
-import { deduireArgent, MAJArgents, modifArgents } from "./utils/MAJArgents.js";
+import { getDates, ISOtoDate } from "./utils/dateFormat.js";
+import {
+  deduireArgent,
+  initialise,
+  MAJArgents,
+  modifArgents,
+} from "./utils/MAJArgents.js";
 import { modifTransaction, suprTransaction } from "./utils/MAJTransactions.js";
+import Parametre from "./components/Parametre.jsx";
 
 function App() {
   // ----------------------
@@ -35,7 +41,7 @@ function App() {
   });
   const [argents, setArgent] = useState(() => {
     const savedArgents = JSON.parse(localStorage.getItem("argents"));
-    return savedArgents ? savedArgents : { solde: 0, revenue: 0, depense: 0 };
+    return savedArgents ? savedArgents : initialise();
   });
 
   // Au premier rendu : si aucun argent n'est enregistré, ouvrir la modal avec "Solde"
@@ -89,9 +95,14 @@ function App() {
   };
 
   // Dates des transactions
-  const dates = Array.from(
-    new Set(transactions.map((item) => item.date.toISOString().slice(0, 7)))
-  ).reverse();
+  const dates = getDates(transactions);
+  if (!dates.some((d) => d === new Date().toISOString().slice(0, 7)))
+    dates.unshift(new Date().toISOString().slice(0, 7));
+
+  const reinitialise = (aReinit) => {
+    if (aReinit.argents) setArgent(initialise);
+    if (aReinit.transacs) setTransaction([]);
+  };
 
   return (
     <>
@@ -158,8 +169,9 @@ function App() {
                   />
                 </Container>
               </Tab.Pane>
+
               <Tab.Pane eventKey="setting">
-                <h1>Ici les paramètres</h1>
+                <Parametre reinitialise={reinitialise} />
               </Tab.Pane>
             </Tab.Content>
           </Col>
